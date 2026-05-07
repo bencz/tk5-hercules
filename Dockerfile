@@ -28,7 +28,7 @@ WORKDIR /tk5/
 
 COPY --from=builder /tk5/ .
 
-VOLUME [ "/tk5/conf","/tk5/local_conf","/tk5/local_scripts","/tk5/prt","/tk5/dasd","/tk5/pch","/tk5/jcl","/tk5/log","/tk5/tape" ]
+# VOLUME [ "/tk5/conf","/tk5/local_conf","/tk5/local_scripts","/tk5/prt","/tk5/dasd","/tk5/pch","/tk5/jcl","/tk5/log","/tk5/tape" ]
 
 RUN apk update && apk upgrade
 
