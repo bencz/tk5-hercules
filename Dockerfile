@@ -1,11 +1,16 @@
-FROM alpine AS builder
+FROM debian:bookworm-slim AS builder
 
 WORKDIR /tk5/
-ADD https://www.prince-webdesign.nl/images/downloads/mvs-tk5.zip /tk5/
 
-RUN apk add --no-cache unzip
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    unzip \
+    ca-certificates \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN unzip mvs-tk5.zip && rm -rf mvs-tk5.zip
+RUN wget -O mvs-tk5.zip https://www.prince-webdesign.nl/images/downloads/mvs-tk5.zip
+
+RUN unzip mvs-tk5.zip && rm mvs-tk5.zip
 
 RUN cd mvs-tk5 && \
     mv * .. && \
@@ -18,23 +23,22 @@ RUN echo "CONSOLE" > /tk5/unattended/mode
 RUN rm -rf /tk5/hercules/darwin /tk5/hercules/windows
 
 
-FROM alpine
+FROM debian:bookworm-slim
 
 WORKDIR /tk5/
 
 COPY --from=builder /tk5/ .
 
-RUN apk add --no-cache \
-    gcompat \
-    libstdc++ \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     bash \
-    libbz2 \
     python3 \
-    py3-pip && \
-    pip3 install --break-system-packages websockify && \
-    cd /usr/lib && ln -sf libbz2.so.1 libbz2.so.1.0
+    python3-pip \
+    libbz2-1.0 \
+    libstdc++6 \
+    ca-certificates \
+    && pip3 install --break-system-packages websockify \
+    && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 6080
-EXPOSE 3270
 
 CMD ["bash", "-c", "websockify 0.0.0.0:${PORT:-6080} 127.0.0.1:3270 & exec /tk5/mvs"]
