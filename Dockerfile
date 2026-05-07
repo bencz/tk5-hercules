@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim AS builder
+FROM ubuntu:24.04 AS builder
 
 WORKDIR /tk5/
 
@@ -23,7 +23,7 @@ RUN echo "CONSOLE" > /tk5/unattended/mode
 RUN rm -rf /tk5/hercules/darwin /tk5/hercules/windows
 
 
-FROM debian:bookworm-slim
+FROM ubuntu:24.04
 
 WORKDIR /tk5/
 
