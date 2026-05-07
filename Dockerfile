@@ -41,4 +41,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 EXPOSE 6080
 
-CMD ["bash", "-c", "websockify 0.0.0.0:${PORT:-6080} 127.0.0.1:3270 & exec /tk5/mvs"]
+CMD ["bash", "-c", "websockify 0.0.0.0:${WS_PORT:-6080} 127.0.0.1:3270 & exec /tk5/mvs"]
