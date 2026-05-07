@@ -37,8 +37,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libstdc++6 \
     ca-certificates \
     && pip3 install --break-system-packages websockify \
+    && chmod +x /tk5/mvs \
     && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 6080
+EXPOSE 3270
 
-CMD ["bash", "-c", "websockify 0.0.0.0:${WS_PORT:-6080} 127.0.0.1:3270 & exec /tk5/mvs"]
+CMD ["bash", "-lc", "cd /tk5 && set -x && websockify 0.0.0.0:${WS_PORT:-6080} 127.0.0.1:3270 & exec ./mvs"]
